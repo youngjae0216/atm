@@ -17,7 +17,6 @@ public class User {
 	public ArrayList<Account> getAccs(){
 		return this.accs;
 	}
-	
 
 	public String getId() {
 		return this.id;

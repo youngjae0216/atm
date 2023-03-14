@@ -10,12 +10,11 @@ public class AccountManager {
 		return this.list;
 	}
 	
-	// Account ø° ¥Î«—
-
 	// Create
 	public void addAccount(Account account) {
 		this.list.add(account);
 	}
+	
 	// Read
 	public Account getAccount(int index) {
 		Account account = this.list.get(index);
@@ -26,11 +25,6 @@ public class AccountManager {
 		Account reqAcc = new Account(userId, accNum, money);
 		return reqAcc;
 	}
-//	public Account getAccountByNum(int account) {
-//		int index = -1;
-//		//??
-//		return getAccount(index);
-//	}
 	
 	// Update
 	public void setAccount(int index, Account account) {

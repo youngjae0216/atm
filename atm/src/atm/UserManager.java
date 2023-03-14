@@ -10,9 +10,6 @@ public class UserManager {
 		return this.list;
 	}
 	
-	
-	// User ¿¡ ´ëÇÑ
-
 	// Create
 	public void addUser(User user) {
 		this.list.add(user);
@@ -29,13 +26,6 @@ public class UserManager {
 		return reqObj;
 	}
 	
-	public User getUserById(String id) {
-		int index = -1;
-		//??
-		return getUser(index);
-	}
-	
-	
 	// Update
 	public void setUser(int index, User user) {
 		this.list.set(index, user);
@@ -47,5 +37,4 @@ public class UserManager {
 	public void deleteUserById(String id) {
 		this.list.remove(id);
 	}
-
 }
