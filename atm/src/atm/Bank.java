@@ -11,14 +11,14 @@ public class Bank {
 	private final int LOG_IN = 5;
 	private final int LOG_OUT = 6;
 	private final int QUIT = 7;
-	
+
 	private UserManager um;
 	private AccountManager am;
 
 	private String name;
 	private Scanner scan;
 	private int log;
-	
+
 	private ArrayList<User> userList;
 	private ArrayList<Account> accountList;
 
@@ -67,14 +67,16 @@ public class Bank {
 		String name = scan.next();
 		User user = new User(id, pw, name);
 		int index = -1;
-		for(int i=0; i<this.userList.size();i++) {
-			if(this.userList.get(i).getId().equals(id)) {
+		for (int i = 0; i < this.userList.size(); i++) {
+			if (this.userList.get(i).getId().equals(id)) {
 				index = i;
 			}
 		}
-		if(index == -1) {
-			System.out.println("가입완료");
+		if (index == -1) {
+			System.out.println("회원가입완료");
 			this.userList.add(user);
+		} else {
+			System.out.println("중복된 아이디 입니다.");
 		}
 	}
 
@@ -84,24 +86,43 @@ public class Bank {
 		System.out.println("pw : ");
 		String pw = scan.next();
 		int index = -1;
-		for(int i=0; i<this.userList.size();i++) {
-			if(this.userList.get(i).getId().equals(id) && this.userList.get(i).getPassword().equals(pw))
+		for (int i = 0; i < this.userList.size(); i++) {
+			if (this.userList.get(i).getId().equals(id) && this.userList.get(i).getPassword().equals(pw))
 				index = i;
 		}
-		if(index != -1) {
-			System.out.println("탈퇴완료");
+		if (index != -1) {
+			System.out.println("회원탈퇴완료");
 			this.userList.remove(index);
-		}
-		else
-			System.out.println("일치하지 않는 정보");
+		} else
+			System.out.println("일치하지 않는 정보입니다.");
 	}
 
 	private void newAcc() {
-		
+		this.accountList = this.userList.get(log).getAccs();
+		if (this.accountList.size() < Account.LIMIT) {
+			System.out.println("계좌번호 : ");
+			String accNum = this.scan.next();
+			Account account = new Account(this.userList.get(log).getId(), accNum, 0);
+			this.accountList.add(account);
+		} else {
+			System.out.println("계좌는 최대 3개까지만 개설할 수 있습니다.");
+		}
 	}
 
 	private void deleteAcc() {
+		this.accountList = this.userList.get(log).getAccs();
+		if (this.accountList.size() == 0) {
+			System.out.println("개설된 계좌가 없습니다.");
+			return;
+		}
 
+		for (int i = 0; i < this.accountList.size(); i++) {
+			System.out.printf("%d) %s / %d원\n", i + 1, this.accountList.get(i).getAccNum(),
+					this.accountList.get(i).getMoney());
+		}
+		System.out.println("삭제할 계좌번호의 index를 누르시오");
+		int select = this.scan.nextInt();
+		this.accountList.remove(select);
 	}
 
 	private void logIn() {
@@ -110,39 +131,56 @@ public class Bank {
 		System.out.println("pw : ");
 		String pw = scan.next();
 		int index = -1;
-		for(int i=0; i<this.userList.size();i++) {
-			if(this.userList.get(i).getId().equals(id) && this.userList.get(i).getPassword().equals(pw))
+		for (int i = 0; i < this.userList.size(); i++) {
+			if (this.userList.get(i).getId().equals(id) && this.userList.get(i).getPassword().equals(pw))
 				index = i;
-		}	
+		}
+		if (index != -1) {
+			System.out.println("로그인성공");
+			log = index;
+		}
 	}
+
 	private void logOut() {
 		System.out.println("로그아웃합니다.");
 		this.log = -1;
 	}
-	
+
 	private void printAll() {
-		for(int i=0;i<this.userList.size();i++) {
+		for (int i = 0; i < this.userList.size(); i++) {
 			User user = userList.get(i);
-			System.out.printf("%s/%s/%s\n",user.getId(),user.getPassword(),user.getName());
+			System.out.printf("%s/%s/%s\n", user.getId(), user.getPassword(), user.getName());
+			ArrayList<Account> accs = user.getAccs();
+			for (int j = 0; j < accs.size(); j++) {
+				System.out.printf("%s님의 %d번째 계좌\n 계좌번호 : %s / 잔액 : %d원\n", user.getId(), j + 1, accs.get(j).getAccNum(),
+						accs.get(j).getMoney());
+			}
 		}
 	}
-	
+
+	private void printLogInUser() {
+		System.out.printf("%s님 환영합니다!!\n", this.userList.get(log).getId());
+	}
+
 	public void run() {
 		while (true) {
 			printAll();
 			printMenu();
+			if (this.log != -1) {
+				printLogInUser();
+			}
 			int select = selectMenu();
 			if (select == JOIN)
 				join();
 			else if (select == LEAVE)
 				leave();
-			else if (select == NEW_ACC)
+			else if (select == NEW_ACC && this.log != -1)
 				newAcc();
-			else if (select == DELETE_ACC)
+			else if (select == DELETE_ACC && this.log != -1)
 				deleteAcc();
-			else if (select == LOG_IN)
+			else if (select == LOG_IN && this.log == -1)
 				logIn();
-			else if (select == LOG_OUT)
+			else if (select == LOG_OUT && this.log != -1)
 				logOut();
 			else if (select == QUIT)
 				break;

@@ -11,14 +11,12 @@ public class User {
 		this.id = id;
 		this.password = password;
 		this.name = name;
+		this.accs = new ArrayList<>();
 	}
 	
-//	public ArrayList<Account> getAccs(){
-//		ArrayList<Account> temp = new ArrayList<>();
-//		
-//		
-//		return temp;
-//	}
+	public ArrayList<Account> getAccs(){
+		return this.accs;
+	}
 	
 
 	public String getId() {

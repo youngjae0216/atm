@@ -19,16 +19,18 @@ public class AccountManager {
 	// Read
 	public Account getAccount(int index) {
 		Account account = this.list.get(index);
-		int acc = account.getAccount();
+		String userId = account.getUserId(); 
+		String accNum = account.getAccNum();
+		int money = account.getMoney();
 		//ป็บป
-		Account reqAcc = new Account(acc);
+		Account reqAcc = new Account(userId, accNum, money);
 		return reqAcc;
 	}
-	public Account getAccountByNum(int account) {
-		int index = -1;
-		//??
-		return getAccount(index);
-	}
+//	public Account getAccountByNum(int account) {
+//		int index = -1;
+//		//??
+//		return getAccount(index);
+//	}
 	
 	// Update
 	public void setAccount(int index, Account account) {
