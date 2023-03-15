@@ -10,6 +10,7 @@ public class Bank {
 
 	private UserManager um;
 	private AccountManager am;
+	private FileManager fm;
 	private int log;
 
 	public Bank(String brandName) {
@@ -17,6 +18,7 @@ public class Bank {
 		this.scan = new Scanner(System.in);
 		this.um = new UserManager();
 		this.am = new AccountManager();
+		this.fm = new FileManager();
 		this.log = -1;
 	}
 
@@ -31,6 +33,7 @@ public class Bank {
 		System.out.println("5. 로그인");
 		System.out.println("6. 로그아웃");
 		System.out.println("7. 뱅킹기능");
+		System.out.println("8. 파일기능");
 		System.out.println("0. 종료");
 	}
 
@@ -80,14 +83,19 @@ public class Bank {
 				logout();
 			else if (sel == 7 && log != -1)
 				banking();
+			else if (sel == 8)
+				file();
 			else if (sel == 0)
 				break;
 		}
 		System.out.println("시스템이 종료되었습니다.");
 	}
 
+	private void file() {
+		this.fm = null;
+	}
+
 	private void banking() {
-		// - 뱅킹기능(입금,출금,조회,이체,계좌생성,계좌철회)
 		if (this.um.getUser(log).getAccountSize() == 0) {
 			System.out.println("계좌를 먼저 신청하세요.");
 			return;
@@ -110,12 +118,44 @@ public class Bank {
 	}
 
 	private void transfer() {
-
+		User user = this.um.getUser(log);
+		System.out.println("이용하실 계좌를 선택하세요.");
+		for (int i = 0; i < user.getAccountSize(); i++) {
+			System.out.printf("%d) ", i + 1);
+			user.getAccount(i).printAccount();
+		}
+		int index = this.scan.nextInt() - 1;
+		if (0 <= index && index < user.getAccountSize()) {
+			Account myAcc = user.getAccount(index);
+			System.out.println("이체하실 상대의 계좌번호 : ");
+			String accNum = this.scan.next();
+			Account yourAcc = this.am.getAccountByNum(accNum);
+			if(yourAcc != null) {
+				System.out.println("이체하실 금액 : ");
+				int money = this.scan.nextInt();
+				if(myAcc.getMoney()>= money) {
+					myAcc.setMoney(myAcc.getMoney()-money);
+					yourAcc.setMoney(yourAcc.getMoney()+money);
+					System.out.println("이체완료!");
+				}
+				else {
+					System.out.println("잔액부족!");
+				}
+			}
+			else {
+				System.out.println("존재하지 않는 계좌번호입니다.");
+			}
+			
+			
+		}
 	}
 
 	private void accountInquiry() {
-		System.out.printf("%s님의 계좌목록\n", this.um.getUser(log).getId());
-		printAcc();
+		User user = this.um.getUser(log);
+		System.out.printf("%s님의 계좌목록\n", user.getId());
+		for(int i=0;i<user.getAccountSize();i++) {
+			user.getAccount(i).printAccount();
+		}
 	}
 
 	private void withdraw() {
