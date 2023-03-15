@@ -21,8 +21,8 @@ public class Bank {
 	}
 
 	private void printMainMenu() {
-		if(this.log != -1 )
-			System.out.printf("%s님 환영합니다!!\n",this.um.getUser(log).getName());
+		if (this.log != -1)
+			System.out.printf("%s님 환영합니다!!\n", this.um.getUser(log).getName());
 		System.out.println("=== " + this.brandName + " === ");
 		System.out.println("1. 회원가입");
 		System.out.println("2. 회원탈퇴");
@@ -46,17 +46,17 @@ public class Bank {
 
 		return number;
 	}
-	
+
 	private void printAcc() {
-		for(int i=0; i<this.um.getUserListSize();i++) {
-			for(int j=0;j<this.um.getUser(i).getAccountSize();j++) {
+		for (int i = 0; i < this.um.getUserListSize(); i++) {
+			for (int j = 0; j < this.um.getUser(i).getAccountSize(); j++) {
 				Account temp = this.um.getUser(i).getAccount(j);
-				System.out.printf("%s님의 %d번째 계좌 : ",this.um.getUser(i).getId(),j+1);
+				System.out.printf("%s님의 %d번째 계좌 : ", this.um.getUser(i).getId(), j + 1);
 				temp.printAccount();
 			}
 		}
 	}
-	
+
 	public void run() {
 		while (true) {
 			this.um.printAll();
@@ -84,7 +84,7 @@ public class Bank {
 
 	private void logout() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void joinUser() {
@@ -117,8 +117,7 @@ public class Bank {
 			Account account = this.am.createAccount(new Account(user.getId()));
 			this.um.setUser(user, account);
 			System.out.println("계좌 개설 완료!");
-		}
-		else {
+		} else {
 			System.out.println("계좌는 한 계정당 최대 3개까지만 개설가능합니다.");
 		}
 	}
@@ -136,9 +135,8 @@ public class Bank {
 				Account account = user.getAccount(index);
 				this.am.deleteAccount(index);
 				this.um.setUser(user, account);
-			}
-			else
-				System.out.printf("0~%d사이의 숫자를 입력하세요\n",user.getAccountSize()-1);
+			} else
+				System.out.printf("0~%d사이의 숫자를 입력하세요\n", user.getAccountSize() - 1);
 		} else {
 			System.out.println("계좌가 존재하지 않습니다.");
 		}
@@ -150,15 +148,14 @@ public class Bank {
 		System.out.print("password : ");
 		String password = this.scan.next();
 		User user = this.um.getUserById(id);
-		if(this.um.getUserById(id) != null) {
-			if(user.getPassword().equals(password)) {
+		if (this.um.getUserById(id) != null) {
+			if (user.getPassword().equals(password)) {
 				this.log = this.um.indexOfById(id);
 			}
-		}
-		else {
+		} else {
 			System.out.println("존재하지 않는 아이디입니다.");
 		}
-		
+
 	}
 
 }
