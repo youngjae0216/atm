@@ -1,41 +1,74 @@
 package atm;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AccountManager {
-
+	
 	private static ArrayList<Account> list = new ArrayList<Account>();
 	
-	public ArrayList<Account> getList(){
-		return this.list;
+	// Create 
+	public Account createAccount(Account account) {
+		String accountNum = accNumGenerator();
+		account.setAccNum(accountNum);
+		list.add(account);
+		return account;
 	}
 	
-	// Create
-	public void addAccount(Account account) {
-		this.list.add(account);
-	}
-	
-	// Read
+	// Read 
 	public Account getAccount(int index) {
-		Account account = this.list.get(index);
-		String userId = account.getUserId(); 
-		String accNum = account.getAccNum();
-		int money = account.getMoney();
-		//사본
-		Account reqAcc = new Account(userId, accNum, money);
-		return reqAcc;
+		Account account = list.get(index);
+		
+		Account reqObj = new Account(account.getUserId(), account.getAccNum(), account.getMoney());;
+		return reqObj;
+	}
+	
+	public Account getAccountByNum(String accountNum) {
+		Account account = null;
+		
+		for(Account object : list) {
+			if(object.getAccNum().equals(accountNum))
+				account = object;
+		}
+		
+		return account;
+	}
+	
+	public void printAll() {
+		for(Account account : this.list) {
+			int n = 1;
+			System.out.printf("%d번 계좌 : %s / %d원\n",n++,account.getAccNum(),account.getMoney());
+		}
 	}
 	
 	// Update
 	public void setAccount(int index, Account account) {
-		this.list.set(index, account);
+		list.set(index, account);
 	}
 	
-	// Delete
+	// Delete 
 	public void deleteAccount(int index) {
-		this.list.remove(index);
+		list.remove(index);
 	}
-	public void deleteAccountByNum(int account) {
-		this.list.remove(account);
+	
+	private String accNumGenerator() {
+		// ####-####
+		String num = "";
+		
+		Random ran = new Random();
+		while(true) {
+			int first = ran.nextInt(8999) + 1000;
+			int second = ran.nextInt(8999) + 1000;
+			
+			num = first + "-" + second;
+			
+			Account account = getAccountByNum(num);
+			
+			if(account == null)
+				break;
+		}
+		
+		return num;
 	}
+
 }
