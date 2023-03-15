@@ -92,7 +92,7 @@ public class Bank {
 	}
 
 	private void file() {
-		this.fm = null;
+		this.fm.save();
 	}
 
 	private void banking() {
