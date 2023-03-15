@@ -92,7 +92,15 @@ public class Bank {
 	}
 
 	private void file() {
-		this.fm.save();
+		System.out.println("1. 저장하기");
+		System.out.println("2. 로드하기");
+		int sel = inputNumber();
+		if (sel == 1)
+			this.fm.save();
+		else if (sel == 2) {
+			this.fm.load();
+		}
+		
 	}
 
 	private void banking() {
@@ -130,30 +138,27 @@ public class Bank {
 			System.out.println("이체하실 상대의 계좌번호 : ");
 			String accNum = this.scan.next();
 			Account yourAcc = this.am.getAccountByNum(accNum);
-			if(yourAcc != null) {
+			if (yourAcc != null) {
 				System.out.println("이체하실 금액 : ");
 				int money = this.scan.nextInt();
-				if(myAcc.getMoney()>= money) {
-					myAcc.setMoney(myAcc.getMoney()-money);
-					yourAcc.setMoney(yourAcc.getMoney()+money);
+				if (myAcc.getMoney() >= money) {
+					myAcc.setMoney(myAcc.getMoney() - money);
+					yourAcc.setMoney(yourAcc.getMoney() + money);
 					System.out.println("이체완료!");
-				}
-				else {
+				} else {
 					System.out.println("잔액부족!");
 				}
-			}
-			else {
+			} else {
 				System.out.println("존재하지 않는 계좌번호입니다.");
 			}
-			
-			
+
 		}
 	}
 
 	private void accountInquiry() {
 		User user = this.um.getUser(log);
 		System.out.printf("%s님의 계좌목록\n", user.getId());
-		for(int i=0;i<user.getAccountSize();i++) {
+		for (int i = 0; i < user.getAccountSize(); i++) {
 			user.getAccount(i).printAccount();
 		}
 	}
@@ -203,7 +208,7 @@ public class Bank {
 		System.out.println("3. 계좌조회");
 		System.out.println("4. 이체하기");
 		System.out.println("0. 뒤로가기");
-		
+
 	}
 
 	private void logout() {

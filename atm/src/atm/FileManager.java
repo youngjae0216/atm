@@ -44,7 +44,7 @@ public class FileManager {
 		}
 		System.out.println(data);
 		try {
-			this.fileWriter = new FileWriter(fileName);
+			this.fileWriter = new FileWriter(this.fileName);
 			this.fileWriter.write(data);
 
 			this.fileWriter.close();
@@ -56,18 +56,28 @@ public class FileManager {
 
 	public void load() {
 		try {
-			this.fileReader = new FileReader(fileName);
-			this.bufferedReader = new BufferedReader(fileReader);
+			this.fileReader = new FileReader(this.fileName);
+			this.bufferedReader = new BufferedReader(this.fileReader);
 			
-			if(file.exists()) {
-				while(bufferedReader.ready()) {
-					
-					
+			if(this.file.exists()) {
+				while(this.bufferedReader.ready()) {
+					String[] temp = this.bufferedReader.readLine().split(",");
+					String[] info = temp[0].split("/");
+					User user = new User(info[0],info[1],info[2]);
+					this.um.addUser(user);
+					for(int i=1;i<temp.length;i++) {
+						info = temp[i].split("/");
+						Account account = new Account(user.getId(), info[0], Integer.parseInt(info[1]));
+						user.addAccount(account);
+					}
 				}
 			}
 			
+			this.fileReader.close();
+			this.bufferedReader.close();
 			System.err.println("로드성공!");
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.err.println("로드실패!");
 		}
 	}
