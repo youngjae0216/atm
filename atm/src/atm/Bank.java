@@ -33,6 +33,7 @@ public class Bank {
 		System.out.println("7. 뱅킹기능");
 		System.out.println("0. 종료");
 	}
+
 	private int inputNumber() {
 		int number = -1;
 
@@ -86,27 +87,74 @@ public class Bank {
 	}
 
 	private void banking() {
-		//- 뱅킹기능(입금,출금,조회,이체,계좌생성,계좌철회)
-		while(true){
-			printAcc();
+		// - 뱅킹기능(입금,출금,조회,이체,계좌생성,계좌철회)
+		if (this.um.getUser(log).getAccountSize() == 0) {
+			System.out.println("계좌를 먼저 신청하세요.");
+			return;
+		}
+		while (true) {
 			printBankingMenu();
 			int sel = inputNumber();
-			if(sel == 1)
+			if (sel == 1)
 				deposit();
-//			else if(sel == 2)
-//				withdraw();
-//			else if(sel == 3)
-//				accountInquiry();
-//			else if(sel == 4)
-//				transfer();
-			
+			else if (sel == 2)
+				withdraw();
+			else if (sel == 3)
+				accountInquiry();
+			else if (sel == 4)
+				transfer();
+			else if (sel == 0)
+				break;
 		}
-		
+
+	}
+
+	private void transfer() {
+
+	}
+
+	private void accountInquiry() {
+		System.out.printf("%s님의 계좌목록\n", this.um.getUser(log).getId());
+		printAcc();
+	}
+
+	private void withdraw() {
+		User user = this.um.getUser(log);
+		System.out.println("이용하실 계좌를 선택하세요.");
+		for (int i = 0; i < user.getAccountSize(); i++) {
+			System.out.printf("%d) ", i + 1);
+			user.getAccount(i).printAccount();
+		}
+		int index = this.scan.nextInt() - 1;
+		if (0 <= index && index < user.getAccountSize()) {
+			Account account = user.getAccount(index);
+			System.out.println("출금하실 금액 : ");
+			int getMoney = this.scan.nextInt();
+			if (account.getMoney() >= getMoney) {
+				account.setMoney(account.getMoney() - getMoney);
+				System.out.println("출금완료!");
+			} else {
+				System.out.println("잔액부족!");
+			}
+		}
+
 	}
 
 	private void deposit() {
-		// TODO Auto-generated method stub
-		
+		User user = this.um.getUser(log);
+		System.out.println("이용하실 계좌를 선택하세요.");
+		for (int i = 0; i < user.getAccountSize(); i++) {
+			System.out.printf("%d) ", i + 1);
+			user.getAccount(i).printAccount();
+		}
+		int index = this.scan.nextInt() - 1;
+		if (0 <= index && index < user.getAccountSize()) {
+			Account account = user.getAccount(index);
+			System.out.println("입금하실 금액 : ");
+			account.setMoney(account.getMoney() + this.scan.nextInt());
+			System.out.println("입금완료!");
+		}
+
 	}
 
 	private void printBankingMenu() {
@@ -114,6 +162,8 @@ public class Bank {
 		System.out.println("2. 출금하기");
 		System.out.println("3. 계좌조회");
 		System.out.println("4. 이체하기");
+		System.out.println("0. 뒤로가기");
+		
 	}
 
 	private void logout() {
@@ -166,7 +216,7 @@ public class Bank {
 			System.out.println("철회하실 계좌 선택");
 
 			int index = inputNumber() - 1;
-			if (0 <= index && index <= user.getAccountSize()-1) {
+			if (0 <= index && index <= user.getAccountSize() - 1) {
 				user.deleteAccount(index);
 				this.um.setUser(this.log, user);
 				System.out.println("계좌가 삭제되었습니다.");
