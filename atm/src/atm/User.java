@@ -15,6 +15,12 @@ public class User {
 		this.name = name;
 		this.accs = new ArrayList<Account>();
 	}
+	public User(String id, String password, String name, ArrayList<Account> accs) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.accs = accs;
+	}
 
 	public String getId() {
 		return id;
@@ -39,5 +45,12 @@ public class User {
 	public Account getAccount(int index) {
 		return this.accs.get(index);
 	}
-
+	
+	public ArrayList<Account> getList(){
+		return this.accs;
+	}
+	
+	public void deleteAccount(int index) {
+		this.accs.remove(index);
+	}
 }

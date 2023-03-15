@@ -29,9 +29,10 @@ public class Bank {
 		System.out.println("3. 계좌신청");
 		System.out.println("4. 계좌철회");
 		System.out.println("5. 로그인");
+		System.out.println("6. 로그아웃");
+		System.out.println("7. 뱅킹기능");
 		System.out.println("0. 종료");
 	}
-
 	private int inputNumber() {
 		int number = -1;
 
@@ -76,15 +77,48 @@ public class Bank {
 				login();
 			else if (sel == 6 && log != -1)
 				logout();
+			else if (sel == 7 && log != -1)
+				banking();
 			else if (sel == 0)
 				break;
 		}
 		System.out.println("시스템이 종료되었습니다.");
 	}
 
-	private void logout() {
-		// TODO Auto-generated method stub
+	private void banking() {
+		//- 뱅킹기능(입금,출금,조회,이체,계좌생성,계좌철회)
+		while(true){
+			printAcc();
+			printBankingMenu();
+			int sel = inputNumber();
+			if(sel == 1)
+				deposit();
+//			else if(sel == 2)
+//				withdraw();
+//			else if(sel == 3)
+//				accountInquiry();
+//			else if(sel == 4)
+//				transfer();
+			
+		}
+		
+	}
 
+	private void deposit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void printBankingMenu() {
+		System.out.println("1. 입금하기");
+		System.out.println("2. 출금하기");
+		System.out.println("3. 계좌조회");
+		System.out.println("4. 이체하기");
+	}
+
+	private void logout() {
+		System.out.println("로그아웃합니다.");
+		this.log = -1;
 	}
 
 	private void joinUser() {
@@ -113,6 +147,7 @@ public class Bank {
 		// 복제본 반환 받음
 		User user = this.um.getUser(this.log);
 
+		System.out.println(user.getAccountSize());
 		if (user.getAccountSize() < Account.LIMIT) {
 			Account account = this.am.createAccount(new Account(user.getId()));
 			this.um.setUser(user, account);
@@ -131,12 +166,12 @@ public class Bank {
 			System.out.println("철회하실 계좌 선택");
 
 			int index = inputNumber() - 1;
-			if (0 <= index && index <= user.getAccountSize() - 1) {
-				Account account = user.getAccount(index);
-				this.am.deleteAccount(index);
-				this.um.setUser(user, account);
+			if (0 <= index && index <= user.getAccountSize()-1) {
+				user.deleteAccount(index);
+				this.um.setUser(this.log, user);
+				System.out.println("계좌가 삭제되었습니다.");
 			} else
-				System.out.printf("0~%d사이의 숫자를 입력하세요\n", user.getAccountSize() - 1);
+				System.out.printf("1~%d사이의 숫자를 입력하세요\n", user.getAccountSize());
 		} else {
 			System.out.println("계좌가 존재하지 않습니다.");
 		}

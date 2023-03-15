@@ -51,6 +51,7 @@ public class AccountManager {
 	public void deleteAccount(int index) {
 		list.remove(index);
 	}
+	
 
 	private String accNumGenerator() {
 		// ####-####
